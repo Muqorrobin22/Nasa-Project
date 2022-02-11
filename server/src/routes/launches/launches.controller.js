@@ -1,15 +1,15 @@
 const {
   getAllLaunches,
-  postLaunches,
+  scheduledNewLaunches,
   launchesWithIdExist,
   abortLaunchById,
 } = require("../../models/launch.model");
 
-function httpGetAllLaunches(req, res) {
-  res.status(200).json(getAllLaunches());
+async function httpGetAllLaunches(req, res) {
+  res.status(200).json(await getAllLaunches());
 }
 
-function AddnNewLaunch(req, res) {
+async function AddnNewLaunch(req, res) {
   const launch = req.body;
 
   if (
@@ -30,20 +30,29 @@ function AddnNewLaunch(req, res) {
     });
   }
 
-  postLaunches(launch);
+  await scheduledNewLaunches(launch);
   return res.status(201).json(launch);
 }
 
-function abortLaunches(req, res) {
+async function abortLaunches(req, res) {
   const launchId = Number(req.params.id);
 
-  if (!launchesWithIdExist(launchId)) {
+  const ExistLaunchId = await launchesWithIdExist(launchId);
+
+  if (!ExistLaunchId) {
     return res.status(404).json({
       error: "Launch Not Found!",
     });
   }
 
-  const aborted = abortLaunchById(launchId);
+  const aborted = await abortLaunchById(launchId);
+
+  if (!aborted) {
+    return res.status(400).json({
+      Error: "Error goblok",
+    });
+  }
+
   return res.status(200).json(aborted);
 }
 
