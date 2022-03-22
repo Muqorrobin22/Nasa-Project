@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name: NASA Project CI
   on: 
     push: 
@@ -15,3 +16,22 @@ name: NASA Project CI
             node-version: '16'
         - run: npm install
         - run: npm run build --prefix client
+=======
+name: NASA PROJECT CI
+  on : 
+    push : 
+      branches : [ main ]
+    pull_request : 
+      branches : [ main ]
+  jobs : 
+    build : 
+      runs-on : ubuntu-latest
+      steps : 
+        - uses : actions/checkout@v2
+        - name : Use Node.js version 16
+          uses : actions/setup-node@v2
+          with : 
+            node-version : '16'
+        - run : npm install
+        - run : npm run build --prefix client
+>>>>>>> 57fc21957d624995703bcab566ee366f4bfe3945
